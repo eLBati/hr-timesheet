@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+#
 #
 #    Author: Arnaud Wüst (Camptocamp)
 #    Copyright 2011-2012 Camptocamp SA
@@ -17,7 +17,7 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-##############################################################################
+#
 
 import hr_employee
 import company

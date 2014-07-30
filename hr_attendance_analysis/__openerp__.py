@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#    
+#
+#
 #    Copyright (C) 2011 Domsense srl (<http://www.domsense.com>)
 #    Copyright (C) 2011-2013 Agile Business Group sagl
 #    (<http://www.agilebg.com>)
@@ -18,7 +18,7 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-##############################################################################
+#
 {
     'name': "HR - Attendance Analysis",
     'version': '0.1',
@@ -36,16 +36,16 @@ Several analysis settings can be configured, like:
     'author': 'Agile Business Group',
     'website': 'http://www.agilebg.com',
     'license': 'AGPL-3',
-    "depends" : ['hr_attendance', 'hr_contract', 'hr_holidays', 'report_webkit'],
-    "data" : [
+    "depends": ['hr_attendance', 'hr_contract', 'hr_holidays', 'report_webkit'],
+    "data": [
         'company_view.xml',
         'hr_attendance_view.xml',
         'reports.xml',
         'wizard/print_calendar_report.xml',
         'resource_view.xml',
         'security/ir.model.access.csv',
-        ],
-    "demo" : [],
+    ],
+    "demo": [],
     "active": False,
     "installable": True
 }

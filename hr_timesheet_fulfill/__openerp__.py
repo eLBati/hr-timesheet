@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+#
 #
 #    Author: Guewen Baconnier (Camptocamp)
 #    Author: Vincent Renaville
@@ -18,11 +18,11 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-##############################################################################
+#
 
-{'name' : 'Timesheet Fullfill Wizard',
- 'version' : '1.0',
- 'category' : 'Generic Modules/Human Resources',
+{'name': 'Timesheet Fullfill Wizard',
+ 'version': '1.0',
+ 'category': 'Generic Modules/Human Resources',
  'description':
     '''
     Add a wizard into timesheet allowing people to complete a long period of time with the given values.
@@ -30,17 +30,17 @@
     Known limitation:
       - Will complete all day between dates
     ''',
- 'author' : 'Camptocamp',
+ 'author': 'Camptocamp',
  'website': 'http://camptocamp.com',
- 'depends' : ['hr_timesheet_sheet',],
- 'data' : [
+ 'depends': ['hr_timesheet_sheet', ],
+ 'data': [
      'wizard/timesheet_fulfill_view.xml',
-     ],
- 'demo' : [],
- 'test' : [],
+ ],
+ 'demo': [],
+ 'test': [],
  'installable': True,
- 'auto_install' : False,
- 'application' : False,
-}
+ 'auto_install': False,
+ 'application': False,
+ }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

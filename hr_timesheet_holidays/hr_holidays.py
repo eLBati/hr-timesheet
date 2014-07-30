@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+#
 #
 #    Author: JB Aubort
 #    Copyright 2008 Camptocamp SA
@@ -17,14 +17,16 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-##############################################################################
+#
 from openerp.osv import orm, fields
 
+
 class HrHolidaysStatus(orm.Model):
+
     """Add analytic account to holiday status"""
     _inherit = 'hr.holidays.status'
     _columns = {
         'analytic_account_id': fields.many2one('account.analytic.account', 'Analytic Account'),
-        }
+    }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

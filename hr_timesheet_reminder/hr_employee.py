@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+#
 #
 #    Author: Arnaud Wüst (Camptocamp)
 #    Author: Guewen Baconnier (Camptocamp) (port to v7)
@@ -18,7 +18,7 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-##############################################################################
+#
 
 from openerp.osv import fields, orm
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+#
 #
 #    Copyright 2012 Camptocamp SA
 #
@@ -16,7 +16,7 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-##############################################################################
+#
 
 import time
 from datetime import datetime
@@ -36,7 +36,8 @@ class timesheet_report(report_sxw.rml_parse):
     def set_context(self, objects, data, ids, report_type=None):
         self.localcontext['ts_lines'] = objects
         self.localcontext['tot_hours'] = self._get_tot_hours(objects)
-        super(timesheet_report, self).set_context(objects, data, ids, report_type)
+        super(timesheet_report, self).set_context(
+            objects, data, ids, report_type)
 
     def _get_tot_hours(self, ts_lines):
         tot = 0.0
@@ -63,8 +64,13 @@ class timesheet_report(report_sxw.rml_parse):
     def _get_and_change_date_format_for_swiss(self, date_to_format):
         date_formatted = ''
         if date_to_format:
-            date_formatted = datetime.strptime(date_to_format, '%Y-%m-%d').strftime('%d.%m.%Y')
+            date_formatted = datetime.strptime(
+                date_to_format, '%Y-%m-%d').strftime('%d.%m.%Y')
         return date_formatted
 
-report_sxw.report_sxw('report.hr.analytic.timesheet.report', 'hr.analytic.timesheet', 'addons/hr_timesheet_print/report/timesheet_report.rml', parser=timesheet_report)
-report_sxw.report_sxw('report.analytic.line.timesheet.report', 'account.analytic.line', 'addons/hr_timesheet_print/report/timesheet_report.rml', parser=timesheet_report)
+report_sxw.report_sxw(
+    'report.hr.analytic.timesheet.report', 'hr.analytic.timesheet',
+                      'addons/hr_timesheet_print/report/timesheet_report.rml', parser=timesheet_report)
+report_sxw.report_sxw(
+    'report.analytic.line.timesheet.report', 'account.analytic.line',
+                      'addons/hr_timesheet_print/report/timesheet_report.rml', parser=timesheet_report)

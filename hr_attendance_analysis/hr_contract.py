@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+#
 #
 #    Authors: Stéphane Bidoul & Laetitia Gangloff
 #    Copyright (c) 2013 Acsone SA/NV (http://www.acsone.eu)
@@ -25,7 +25,7 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-##############################################################################
+#
 import datetime
 
 from openerp.osv import fields, orm
@@ -40,14 +40,17 @@ class hr_contract(orm.Model):
         If the last end date is False, do nothing
         """
         contract = self.browse(cr, uid, id, context=context)
-        end_date_contract_id = self.search(cr, uid, [('employee_id', '=', contract.employee_id.id), ], limit=1, order='date_end desc', context=context)
+        end_date_contract_id = self.search(
+            cr, uid, [('employee_id', '=', contract.employee_id.id), ], limit=1, order='date_end desc', context=context)
         last_end_date = False
         if end_date_contract_id:
-            contract = self.browse(cr, uid, end_date_contract_id, context=context)
+            contract = self.browse(
+                cr, uid, end_date_contract_id, context=context)
             last_end_date = contract[0].date_end
 
         if last_end_date:
-            defaults['date_start'] = datetime.datetime.strftime(datetime.datetime.strptime(last_end_date, "%Y-%m-%d") + datetime.timedelta(days=1), "%Y-%m-%d")
+            defaults['date_start'] = datetime.datetime.strftime(
+                datetime.datetime.strptime(last_end_date, "%Y-%m-%d") + datetime.timedelta(days=1), "%Y-%m-%d")
             defaults['date_end'] = False
             defaults['trial_date_start'] = False
             defaults['trial_date_end'] = False

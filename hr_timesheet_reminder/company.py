@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+#
 #
 #    Author: Arnaud Wüst (Camptocamp)
 #    Author: Guewen Baconnier (Camptocamp)
@@ -18,7 +18,7 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-##############################################################################
+#
 
 from datetime import datetime
 from dateutil.relativedelta import relativedelta, MO, SU
@@ -37,7 +37,7 @@ class res_company(orm.Model):
 
         for company in self.browse(cr, uid, ids, context=context):
             employee_ids = employee_obj.search(
-                    cr, uid,
+                cr, uid,
                     [('company_id', '=', company.id),
                      ('receive_timesheet_alerts', '=', True)],
                     context=context)
@@ -45,18 +45,21 @@ class res_company(orm.Model):
             if not employee_ids:
                 continue
 
-            employees = employee_obj.browse(cr, uid, employee_ids, context=context)
+            employees = employee_obj.browse(
+                cr, uid, employee_ids, context=context)
 
-            #periods
-            periods = self.compute_timesheet_periods(cr, uid, company, datetime.now(), context=context)
-            #remove the first one because it's the current one
+            # periods
+            periods = self.compute_timesheet_periods(
+                cr, uid, company, datetime.now(), context=context)
+            # remove the first one because it's the current one
             del periods[0]
 
             # for each employee
             for employee in employees:
                 # is timesheet for a period not confirmed ?
                 for period in periods:
-                    status = employee_obj.compute_timesheet_status(cr, uid, employee.id, period, context)
+                    status = employee_obj.compute_timesheet_status(
+                        cr, uid, employee.id, period, context)
 
                     # if there is a missing sheet or a draft sheet
                     # and the user can receive alerts
@@ -72,7 +75,7 @@ class res_company(orm.Model):
         """ return the timeranges to display. This is the 5 last timesheets"""
         periods = []
         last_start_date, last_end_date = self.get_last_period_dates(
-                cr, uid, company, date, context=context)
+            cr, uid, company, date, context=context)
         for cpt in range(periods_number):
             # find the delta between last_XXX_date to XXX_date
             if company.timesheet_range == 'month':
@@ -83,7 +86,7 @@ class res_company(orm.Model):
                 delta = relativedelta(years=-cpt)
             else:
                 raise osv.except_osv(
-                        _('Error'),
+                    _('Error'),
                         _('Unknow timesheet range: %s') % company.timesheet_range)
 
             start_date = last_start_date + delta
@@ -100,7 +103,7 @@ class res_company(orm.Model):
             start_date = date
             end_date = start_date + relativedelta(months=+1)
 
-        #return the first and last days of the week
+        # return the first and last days of the week
         elif company.timesheet_range == 'week':
             # get monday of current week
             start_date = date + relativedelta(weekday=MO(-1))

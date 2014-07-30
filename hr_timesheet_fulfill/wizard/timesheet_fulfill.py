@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+#
 #
 #    Author: Guewen Baconnier (Camptocamp)
 #    Author: Vincent Renaville
@@ -18,11 +18,12 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-##############################################################################
+#
 
 from openerp.osv import fields, osv, orm
 from tools.translate import _
 from datetime import datetime, timedelta
+
 
 def get_number_days_between_dates(date_from, date_to):
     datetime_from = datetime.strptime(date_from, '%Y-%m-%d')
@@ -42,12 +43,12 @@ class HrTimesheetFulfill(orm.TransientModel):
         'description': fields.char('Description', size=100, required=True),
         'nb_hours': fields.float('Hours per Day', digits=(2, 2), required=True),
         'analytic_account_id': fields.many2one('account.analytic.account',
-                               'Analytic Account', required=True,
-                               domain="[('type', '<>', 'view'),"
-                                      "('state', '!=', 'pending'),"
-                                      "('state', '!=', 'close')]"),
-        'task_id':fields.many2one('project.task', 'Task', required=False)
-        }
+                                               'Analytic Account', required=True,
+                                               domain="[('type', '<>', 'view'),"
+                                               "('state', '!=', 'pending'),"
+                                               "('state', '!=', 'close')]"),
+        'task_id': fields.many2one('project.task', 'Task', required=False)
+    }
 
     def fulfill_timesheet(self, cr, uid, ids, context=None):
         if context is None:
@@ -63,11 +64,12 @@ class HrTimesheetFulfill(orm.TransientModel):
 
         # Get the current timesheet
         timesheet_id = context['active_id']
-        timesheet = timesheet_obj.browse(cr, uid, timesheet_id, context=context)
+        timesheet = timesheet_obj.browse(
+            cr, uid, timesheet_id, context=context)
 
         # Get the employee
         employee_id = employee_obj.search(cr, uid,
-                [('user_id', '=', uid)], context=context)[0]
+                                          [('user_id', '=', uid)], context=context)[0]
         employee = employee_obj.browse(cr, uid, employee_id, context=context)
 
         if not(0.0 <= wizard.nb_hours <= 24.0):
@@ -83,9 +85,11 @@ class HrTimesheetFulfill(orm.TransientModel):
 
         # Verify the date must be in timesheet dates
         if timesheet.date_from > wizard.date_from:
-            raise osv.except_osv(_('UserError'), _('Your date_from must be in timesheet dates !'))
+            raise osv.except_osv(
+                _('UserError'), _('Your date_from must be in timesheet dates !'))
         if timesheet.date_to < wizard.date_to:
-            raise osv.except_osv(_('UserError'), _('Your date_to must be in timesheet dates !'))
+            raise osv.except_osv(
+                _('UserError'), _('Your date_to must be in timesheet dates !'))
 
         for day in range(get_number_days_between_dates(wizard.date_from, wizard.date_to)):
             datetime_current = (datetime.strptime(wizard.date_from, '%Y-%m-%d')
@@ -100,7 +104,7 @@ class HrTimesheetFulfill(orm.TransientModel):
                 'date': datetime_current,
                 'unit_amount': wizard.nb_hours,
                 'product_uom_id': unit_id,
-                'user_id':uid,
+                'user_id': uid,
                 'product_id': product_id,
                 'account_id': wizard.analytic_account_id.id,
                 'to_invoice': wizard.analytic_account_id.to_invoice.id,
@@ -111,7 +115,7 @@ class HrTimesheetFulfill(orm.TransientModel):
             on_change_values = al_ts_obj.\
                 on_change_unit_amount(cr, uid, False, product_id,
                                       wizard.nb_hours, employee.company_id.id,
-#                                      task_id=wizard.task_id.id,
+                                      # task_id=wizard.task_id.id,
                                       unit=unit_id, journal_id=journal_id,
                                       context=context)
             if on_change_values:
@@ -120,11 +124,12 @@ class HrTimesheetFulfill(orm.TransientModel):
             # If there is no other attendances, create it
             # create the attendances:
 #            print attendance_obj.read(cr,uid,['name'])
-            existing_attendances=0
-            att_id= attendance_obj.search(cr, uid, [('employee_id', '=', employee_id)])
-            for record in attendance_obj.read(cr,uid,att_id,['name']):
-                if record['name'].startswith( datetime_current ):
-                    existing_attendances=1
+            existing_attendances = 0
+            att_id = attendance_obj.search(
+                cr, uid, [('employee_id', '=', employee_id)])
+            for record in attendance_obj.read(cr, uid, att_id, ['name']):
+                if record['name'].startswith(datetime_current):
+                    existing_attendances = 1
             if not existing_attendances:
                 att_date_start = datetime_current + " 00:00:00"
                 att_start = {

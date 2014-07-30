@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+#
 #
 #    Author: Nicolas Bessi, ported by Joel Grand-Guillaume
 #    Copyright 2012 Camptocamp SA
@@ -17,26 +17,26 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-##############################################################################
+#
 
 {
-    "name" : "Project Timesheet printing",
+    "name": "Project Timesheet printing",
     "description" : """
 This module adds a report on timesheet lines (hr.analytic.timesheet) to print out the
 detailed of hours passed.
 
  """,
-    "version" : "1.3",
-    "author" : "Camptocamp",
-    "category" : "Generic Modules/Projects & Services",
+    "version": "1.3",
+    "author": "Camptocamp",
+    "category": "Generic Modules/Projects & Services",
     "website": "http://www.camptocamp.com",
     "license": 'AGPL-3',
-    "depends" : [
+    "depends": [
         "analytic",
         "hr_timesheet_invoice",
-        ],
-    "init_xml" : [],
-    "update_xml" : [
+    ],
+    "init_xml": [],
+    "update_xml": [
         "report.xml",
     ],
     "active": False,

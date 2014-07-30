@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+#
 #
 #    Author: Arnaud Wüst (Camptocamp)
 #    Author: Guewen Baconnier (Camptocamp) (port to v7)
@@ -18,7 +18,7 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-##############################################################################
+#
 
 import time
 
@@ -42,7 +42,7 @@ class timesheet_status(report_sxw.rml_parse):
             'get_timerange_title': self.get_timerange_title,
             'get_user_list': self.get_user_list,
             'get_timesheet_status': self.get_timesheet_status,
-            })
+        })
 
     def set_context(self, objects, data, ids, report_type=None):
         self.end_date = data['form']['date']
@@ -79,12 +79,12 @@ class timesheet_status(report_sxw.rml_parse):
                                             ('active', '=', True)],
                                            context=self.localcontext)
         return employee_obj.browse(
-                self.cr, self.uid, employee_ids, context=self.localcontext)
+            self.cr, self.uid, employee_ids, context=self.localcontext)
 
     def _get_last_period_dates(self, company, date):
         """ return the start date of the last period to display """
         return self.pool.get('res.company').get_last_period_dates(
-                    self.cr,
+            self.cr,
                     self.uid,
                     company,
                     date,
@@ -93,7 +93,7 @@ class timesheet_status(report_sxw.rml_parse):
     def _compute_periods(self, company, date):
         """ return the timeranges to display. This is the 5 last timesheets """
         return self.pool.get('res.company').compute_timesheet_periods(
-                self.cr,
+            self.cr,
                 self.uid,
                 company,
                 date,
@@ -126,7 +126,7 @@ class timesheet_status(report_sxw.rml_parse):
     def _compute_timesheet_status(self, employee_id, period):
         """ return the timesheet status for a user and a period """
         return self.pool.get('hr.employee').compute_timesheet_status(
-                self.cr,
+            self.cr,
                 self.uid,
                 employee_id,
                 period,
@@ -136,14 +136,14 @@ class timesheet_status(report_sxw.rml_parse):
         """ compute all status for all employees for all periods """
         result = {}
 
-        #for each periods
+        # for each periods
         for p_index, period in enumerate(self.data[obj.id]['time_ranges']):
             result[p_index] = {}
-            #for each employees
+            # for each employees
             for employee in self.data[obj.id]['employees']:
-                #compute the status
+                # compute the status
                 result[p_index][employee.id] = self._compute_timesheet_status(
-                        employee.id, period)
+                    employee.id, period)
 
         return result
 

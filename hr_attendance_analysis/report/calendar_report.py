@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#    
+#
+#
 #    Copyright (C) 2011 Agile Business Group sagl (<http://www.agilebg.com>)
 #    Copyright (C) 2011 Domsense srl (<http://www.domsense.com>)
 #
@@ -17,13 +17,14 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-##############################################################################
+#
 
 import time
 from report import report_sxw
 from osv import osv
 from datetime import datetime
 from tools.translate import _
+
 
 class Parser(report_sxw.rml_parse):
 
@@ -36,14 +37,14 @@ class Parser(report_sxw.rml_parse):
             4: _('Friday'),
             5: _('Saturday'),
             6: _('Sunday'),
-            }
-        dayofweek=''
-        weekday = datetime.strptime(day,'%Y-%m-%d').weekday()
+        }
+        dayofweek = ''
+        weekday = datetime.strptime(day, '%Y-%m-%d').weekday()
         return WEEKDAYS[weekday]
 
     def _get_month_name(self, day):
-        str_month=''
-        month = datetime.strptime(day,'%Y-%m-%d').month
+        str_month = ''
+        month = datetime.strptime(day, '%Y-%m-%d').month
         if month == 1:
             str_month = _('January')
         elif month == 2:
@@ -78,7 +79,7 @@ class Parser(report_sxw.rml_parse):
 
     def _get_max_per_day(self):
         return self.localcontext['data']['form']['max_number_of_attendances_per_day']
-        
+
     def __init__(self, cr, uid, name, context):
         super(Parser, self).__init__(cr, uid, name, context)
         self.localcontext.update({
@@ -91,6 +92,6 @@ class Parser(report_sxw.rml_parse):
         })
 
 report_sxw.report_sxw('report.attendance_analysis.calendar_report',
-                       'attendance_analysis.calendar_report', 
-                       'attendance_analysis/report/calendar_report.mako',
-                       parser=Parser)
+                      'attendance_analysis.calendar_report',
+                      'attendance_analysis/report/calendar_report.mako',
+                      parser=Parser)

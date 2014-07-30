@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+#
 #
 #    Author: Arnaud Wüst (Camptocamp)
 #    Author: Guewen Baconnier (Camptocamp) (port to v7)
@@ -18,7 +18,7 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-##############################################################################
+#
 
 from datetime import datetime, timedelta
 from openerp.osv import fields, orm
@@ -31,7 +31,7 @@ class reminder(orm.Model):
     _description = "Handle the scheduling of timesheet reminders"
 
     _columns = {
-            'reply_to': fields.char('Reply To'),
+        'reply_to': fields.char('Reply To'),
             'message': fields.html('Message'),
             'subject': fields.char('Subject'),
     }
@@ -61,7 +61,7 @@ class reminder(orm.Model):
         # for each company, get all recipients
         recipients = []
         company_recipients = company_obj.get_reminder_recipients(
-                cr, uid, company_ids, context=context)
+            cr, uid, company_ids, context=context)
         for rec in company_recipients.itervalues():
             recipients += rec
 
@@ -92,7 +92,7 @@ class reminder(orm.Model):
         # find the cron that send messages
         ctx = dict(context, active_test=False)
         cron_ids = cron_obj.search(
-                cr, uid,
+            cr, uid,
                 [('function', 'ilike', self.cron['function']),
                  ('model', 'ilike', self.cron['model'])],
                 context=ctx)
@@ -118,14 +118,14 @@ class reminder(orm.Model):
 
     def get_message_id(self, cr, uid, context=None):
         """ return the message's id. create one if the message does not exists """
-        #there is only one line in db, let's get it
+        # there is only one line in db, let's get it
         message_ids = self.search(cr, uid, [], limit=1, context=context)
 
         message_id = None
         if message_ids:
             message_id = message_ids[0]
 
-        #the message does not exists
+        # the message does not exists
         if message_id is None:
             vals = dict(self.message,
                         subject=_('Timesheet Reminder'),
@@ -144,7 +144,7 @@ class reminder(orm.Model):
         cron_id = self.get_cron_id(cr, uid, context)
 
         cron_data = self.pool.get('ir.cron').browse(
-                cr, uid, cron_id, context=context)
+            cr, uid, cron_id, context=context)
 
         # there is only one line in db, let's get it
         message_id = self.get_message_id(cr, uid, context=context)
@@ -156,26 +156,26 @@ class reminder(orm.Model):
                 'message':  message_data.message,
                 'subject': message_data.subject,
                 'nextcall': self._cron_nextcall(),
-               }
+                }
 
     def save_config(self, cr, uid, ids, datas, context=None):
         """save the reminder config """
 
-        #modify the cron
+        # modify the cron
         cron_id = self.get_cron_id(cr, uid, context=context)
         self.pool.get('ir.cron').write(
-                cr, uid, [cron_id],
+            cr, uid, [cron_id],
                 {'active': datas['reminder_active'],
                  'interval_number': datas['interval_number'],
                  'interval_type': datas['interval_type'],
                  'nextcall': datas['nextcall'], },
                  context=context)
-        #modify the message
+        # modify the message
         message_id = ids or self.get_message_id(cr, uid, context)
         self.write(
-                cr, uid, [message_id],
+            cr, uid, [message_id],
                 {'reply_to': datas['reply_to'],
                  'message': datas['message'],
                  'subject': datas['subject'],
-                }, context=context)
+                 }, context=context)
         return True

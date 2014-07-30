@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+#
 #
 #    Author: Arnaud Wüst (Camptocamp)
 #    Author: Guewen Baconnier (Camptocamp) (port to v7)
@@ -18,7 +18,7 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-##############################################################################
+#
 
 from openerp.osv import orm, fields
 
@@ -49,13 +49,15 @@ class reminder_config(orm.TransientModel):
         return True
 
     _constraints = [
-        (_check_interval_number, 'Periodicity must be greater than 0 ', ['interval_number']),
+        (_check_interval_number,
+         'Periodicity must be greater than 0 ', ['interval_number']),
     ]
 
     def default_get(self, cr, uid, fields, context=None):
-        res = super(reminder_config, self).default_get(cr, uid, fields, context=context)
+        res = super(reminder_config, self).default_get(
+            cr, uid, fields, context=context)
         data = self.pool.get('hr.timesheet.reminder').\
-                get_config(cr, uid, context=context)
+            get_config(cr, uid, context=context)
         res.update(data)
         return res
 

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+#
 #
 #    Author: JB Aubort
 #    Copyright 2008 Camptocamp SA
@@ -17,11 +17,11 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-##############################################################################
+#
 
-{'name' : 'Import holidays in timesheets',
- 'version' : '1.0',
- 'category' : 'Generic Modules/Human Resources',
+{'name': 'Import holidays in timesheets',
+ 'version': '1.0',
+ 'category': 'Generic Modules/Human Resources',
  'description': """
 Wizard to import holidays in the current timesheet
 ==================================================
@@ -53,22 +53,22 @@ Contributors
 * Yannick Vaucher <yannick.vaucher@camptocamp.com>
 
 """,
- 'author' : 'Camptocamp',
+ 'author': 'Camptocamp',
  'website': 'http://www.camptocamp.com',
- 'depends' : [
+ 'depends': [
      'hr',
      'account',
      'hr_holidays',
      'hr_timesheet_sheet'
-     ],
- 'data' : [
+ ],
+    'data': [
      'hr_holidays_view.xml',
      'wizard/holidays_import_view.xml',
      'company_view.xml',
-     ],
+    ],
  'installable': True,
  'auto_install': False,
  'application': False,
-}
+ }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

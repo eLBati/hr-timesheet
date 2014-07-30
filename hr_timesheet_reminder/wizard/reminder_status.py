@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+#
 #
 #    Author: Arnaud Wüst (Camptocamp)
 #    Author: Guewen Baconnier (Camptocamp) (port to v7)
@@ -18,7 +18,7 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-##############################################################################
+#
 
 from openerp.osv import orm, fields
 
@@ -34,7 +34,7 @@ class reminder_status(orm.TransientModel):
             'rid',
             string='Company'),
         'date': fields.date('End Date', required=True),
-        }
+    }
 
     _defaults = {
         'date': lambda *a: fields.date.today(),
@@ -42,7 +42,7 @@ class reminder_status(orm.TransientModel):
 
     def print_report(self, cr, uid, ids, context=None):
         form_values = self.read(
-                cr, uid, ids[0], ['company_ids',  'date'], context=context)
+            cr, uid, ids[0], ['company_ids',  'date'], context=context)
 
         # when no company is selected, select them all
         if not form_values['company_ids']:
