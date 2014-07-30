@@ -70,7 +70,9 @@ class timesheet_report(report_sxw.rml_parse):
 
 report_sxw.report_sxw(
     'report.hr.analytic.timesheet.report', 'hr.analytic.timesheet',
-                      'addons/hr_timesheet_print/report/timesheet_report.rml', parser=timesheet_report)
+    'addons/hr_timesheet_print/report/timesheet_report.rml',
+    parser=timesheet_report)
 report_sxw.report_sxw(
     'report.analytic.line.timesheet.report', 'account.analytic.line',
-                      'addons/hr_timesheet_print/report/timesheet_report.rml', parser=timesheet_report)
+    'addons/hr_timesheet_print/report/timesheet_report.rml',
+    parser=timesheet_report)

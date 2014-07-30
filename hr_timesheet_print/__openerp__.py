@@ -21,8 +21,9 @@
 
 {
     "name": "Project Timesheet printing",
-    "description" : """
-This module adds a report on timesheet lines (hr.analytic.timesheet) to print out the
+    "description": """
+This module adds a report on timesheet lines (hr.analytic.timesheet) to print
+out the
 detailed of hours passed.
 
  """,
