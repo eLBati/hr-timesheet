@@ -43,7 +43,7 @@ Limitations:
     In order to avoid timezone issues, please ensure the
     following fix is installed on your system `Fix for Bug #1179893`_
 
-.. _Fix for Bug #1179893: https://code.launchpad.net/~camptocamp/openobject-addons/7.0-fix-hr_timesheet_sheet-timezone-20130723/+merge/176459
+.. _Fix for Bug #1179893: http://goo.gl/VUhx36
 
 Contributors
 ------------
@@ -65,7 +65,7 @@ Contributors
      'hr_holidays_view.xml',
      'wizard/holidays_import_view.xml',
      'company_view.xml',
-    ],
+ ],
  'installable': True,
  'auto_install': False,
  'application': False,

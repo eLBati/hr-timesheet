@@ -25,7 +25,8 @@ import pytz
 
 from openerp.osv import orm, fields, osv
 from openerp.tools.translate import _
-from openerp.tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
+from openerp.tools import (
+    DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT)
 
 
 def get_number_days_between_dates(date_from, date_to):
@@ -84,16 +85,18 @@ class HolidaysImport(orm.TransientModel):
         date_utc_to = get_utc_datetime(
             date_to, local_tz).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
 
-        cr.execute("select id, date_from, date_to, name from hr_holidays where\
-        (\
-            ((date_from <= %s and date_to >= %s and date_to <= %s) or\
-            (date_from >= %s and date_from <= %s and date_to >= %s) or\
-            (date_from >= %s and date_from <= %s and date_to >= %s and date_to <= %s) or\
-            (date_from <= %s and date_to >= %s)) and user_id = %s and state = 'validate'\
-        )", (date_utc_from, date_utc_from, date_utc_to,
-             date_utc_from, date_utc_to, date_utc_to,
-             date_utc_from, date_utc_to, date_utc_from, date_utc_to,
-             date_utc_from, date_utc_to, uid))
+        cr.execute("""select id, date_from, date_to, name from hr_holidays where
+        (
+            ((date_from <= %s and date_to >= %s and date_to <= %s) or
+            (date_from >= %s and date_from <= %s and date_to >= %s) or
+            (date_from >= %s and date_from <= %s and date_to >= %s
+                and date_to <= %s) or
+            (date_from <= %s and date_to >= %s)) and user_id = %s
+                and state = 'validate'
+        )""", (date_utc_from, date_utc_from, date_utc_to,
+               date_utc_from, date_utc_to, date_utc_to,
+               date_utc_from, date_utc_to, date_utc_from, date_utc_to,
+               date_utc_from, date_utc_to, uid))
         holidays = cr.fetchall()
         if not holidays:
             raise osv.except_osv(_('Information'), _(
@@ -110,12 +113,15 @@ class HolidaysImport(orm.TransientModel):
 
             nb_days = get_number_days_between_dates(h_date_from, h_date_to)
             for day in range(nb_days):
-                str_datetime_current = (datetime.strptime(h_date_from, DEFAULT_SERVER_DATETIME_FORMAT)
-                                        + timedelta(days=day)).strftime(DEFAULT_SERVER_DATE_FORMAT)
-                line_ids = line_obj.search(cr, uid,
-                                           [('date', '=', str_datetime_current),
-                                            ('name', '=', h_name),
-                                               ('user_id', '=', uid)], context=context)
+                str_datetime_current = (
+                    datetime.strptime(
+                        h_date_from, DEFAULT_SERVER_DATETIME_FORMAT)
+                    + timedelta(days=day)).strftime(DEFAULT_SERVER_DATE_FORMAT)
+                line_ids = line_obj.search(
+                    cr, uid, [
+                        ('date', '=', str_datetime_current),
+                        ('name', '=', h_name), ('user_id', '=', uid)],
+                    context=context)
                 if line_ids:
                     valid = False
             if not valid:
@@ -127,7 +133,9 @@ class HolidaysImport(orm.TransientModel):
         return res
 
     _columns = {
-        'holidays_ids': fields.many2many('hr.holidays', 'hr_holidays_rel', 'id', 'holiday_id', 'Holidays', domain="[('state', '=', 'validate'),('user_id','=',uid)]"),
+        'holidays_ids': fields.many2many(
+            'hr.holidays', 'hr_holidays_rel', 'id', 'holiday_id', 'Holidays',
+            domain="[('state', '=', 'validate'),('user_id','=',uid)]"),
     }
 
     _defaults = {
@@ -148,12 +156,14 @@ class HolidaysImport(orm.TransientModel):
         timesheet = timesheet_obj.browse(
             cr, uid, timesheet_id, context=context)
 
-        employee_id = employee_obj.search(cr, uid,
-                                          [('user_id', '=', uid)], context=context)[0]
+        employee_id = employee_obj.search(
+            cr, uid, [('user_id', '=', uid)], context=context)[0]
 
         if timesheet.state != 'draft':
             raise osv.except_osv(
-                _('UserError'), _('You can not modify a confirmed timesheet, please ask the manager !'))
+                _('UserError'),
+                _('You can not modify a confirmed timesheet, '
+                  'please ask the manager !'))
 
         wizard = self.browse(cr, uid, ids, context=context)[0]
 
@@ -161,7 +171,9 @@ class HolidaysImport(orm.TransientModel):
         hours_per_day = employee.company_id.timesheet_hours_per_day
         if not hours_per_day:
             raise osv.except_osv(
-                _('UserError'), _('The number of hours per day is not configured on the company.'))
+                _('UserError'),
+                _('The number of hours per day is not configured on the '
+                  'company.'))
 
         if not wizard.holidays_ids:
             raise osv.except_osv(_('Information'), _('No holidays to import.'))
@@ -171,8 +183,11 @@ class HolidaysImport(orm.TransientModel):
         for holiday in wizard.holidays_ids:
             if not holiday.holiday_status_id.analytic_account_id.id:
                 raise osv.except_osv(
-                    _('Error !'), _("Holiday Leave Type %s has no associated analytic account !") % (holiday.holiday_status_id.name,))
-            analytic_account_id = holiday.holiday_status_id.analytic_account_id.id
+                    _('Error !'),
+                    _("Holiday Leave Type %s has no associated analytic "
+                      "account !") % (holiday.holiday_status_id.name,))
+            analytic_account_id = (
+                holiday.holiday_status_id.analytic_account_id.id)
             anl_account = anl_account_obj.browse(
                 cr, uid, analytic_account_id, context)
 
@@ -189,8 +204,11 @@ class HolidaysImport(orm.TransientModel):
             nb_days = get_number_days_between_dates(
                 holiday.date_from, holiday.date_to)
             for day in range(nb_days):
-                dt_current = (datetime.strptime(holiday.date_from, DEFAULT_SERVER_DATETIME_FORMAT)
-                              + timedelta(days=day))
+                dt_current = (
+                    datetime.strptime(
+                        holiday.date_from,
+                        DEFAULT_SERVER_DATETIME_FORMAT)
+                    + timedelta(days=day))
                 # datetime as date at midnight
                 str_dt_current = dt_current.strftime(
                     DEFAULT_SERVER_DATETIME_FORMAT)
@@ -207,11 +225,13 @@ class HolidaysImport(orm.TransientModel):
                     continue
 
                 # Create timesheet lines
-                existing_ts_ids = al_ts_obj.search(cr, uid,
-                                                   [('date', '=', str_dt_current),
-                                                    ('name', '=',
-                                                     holiday.name),
-                                                       ('user_id', '=', uid)])
+                existing_ts_ids = al_ts_obj.search(
+                    cr, uid,
+                    [
+                        ('date', '=', str_dt_current),
+                        ('name', '=', holiday.name),
+                        ('user_id', '=', uid)
+                    ])
                 if not existing_ts_ids:
                     unit_id = al_ts_obj._getEmployeeUnit(cr, uid, context)
                     product_id = al_ts_obj._getEmployeeProduct(
@@ -233,16 +253,18 @@ class HolidaysImport(orm.TransientModel):
                     }
 
                     on_change_values = al_ts_obj.\
-                        on_change_unit_amount(cr, uid, False, product_id,
-                                              hours_per_day, employee.company_id.id,
-                                              unit=unit_id, journal_id=journal_id,
-                                              context=context)
+                        on_change_unit_amount(
+                            cr, uid, False, product_id,
+                            hours_per_day, employee.company_id.id,
+                            unit=unit_id, journal_id=journal_id,
+                            context=context)
                     if on_change_values:
                         holiday_day.update(on_change_values['value'])
                         al_ts_obj.create(cr, uid, holiday_day, context)
                 else:
                     errors.append(
-                        '%s: There already is an analytic line.' % (str_dt_current))
+                        '%s: There already is an analytic line.'
+                        % (str_dt_current))
 
                 # Create attendances
                 existing_attendances = \
@@ -273,7 +295,8 @@ class HolidaysImport(orm.TransientModel):
                     attendance_obj.create(cr, uid, end, context)
                 else:
                     errors.append(
-                        '%s: There already is an attendance.' % (str_dt_current),)
+                        '%s: There already is an attendance.'
+                        % (str_dt_current),)
         if errors:
             errors_str = "\n".join(errors)
             raise osv.except_osv(_('Errors'), errors_str)
