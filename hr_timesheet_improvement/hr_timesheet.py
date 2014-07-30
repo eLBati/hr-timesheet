@@ -25,7 +25,8 @@ class HrAnalyticTimesheet(orm.Model):
 
     """
     Set order by line date and analytic account name instead of id
-    We create related stored values as _order cannot be used on inherited columns
+    We create related stored values as _order cannot be used on inherited
+    columns
     """
     _inherit = "hr.analytic.timesheet"
     _order = "date_aal DESC, account_name ASC"
@@ -41,15 +42,22 @@ class HrAnalyticTimesheet(orm.Model):
         return ts_line_ids
 
     _columns = {
-        'date_aal': fields.related('line_id', 'date', string="Analytic Line Date", type='date',
-                                   store={
-                                   'account.analytic.line': (_get_account_analytic_line, ['date'], 10),
-                                   'hr.analytic.timesheet': (lambda self, cr, uid, ids, context=None: ids, None, 10),
-                                   }),
-        'account_name': fields.related('account_id', 'name', string="Analytic Account Name", type='char', size=256,
-                                       store={
-                                       'account.analytic.account': (_get_account_analytic_account, ['name'], 10),
-                                       'hr.analytic.timesheet': (lambda self, cr, uid, ids, context=None: ids, None, 10),
-                                       }
-                                       ),
+        'date_aal': fields.related(
+            'line_id', 'date', string="Analytic Line Date", type='date',
+            store={
+                'account.analytic.line': (
+                    _get_account_analytic_line, ['date'], 10),
+                'hr.analytic.timesheet': (
+                    lambda self, cr, uid, ids, context=None: ids, None, 10),
+            }),
+        'account_name': fields.related(
+            'account_id', 'name', string="Analytic Account Name",
+            type='char', size=256,
+            store={
+                'account.analytic.account': (
+                    _get_account_analytic_account, ['name'], 10),
+                'hr.analytic.timesheet': (
+                    lambda self, cr, uid, ids, context=None: ids, None, 10),
+            }
+            ),
     }
