@@ -32,8 +32,8 @@ class reminder(orm.Model):
 
     _columns = {
         'reply_to': fields.char('Reply To'),
-            'message': fields.html('Message'),
-            'subject': fields.char('Subject'),
+        'message': fields.html('Message'),
+        'subject': fields.char('Subject'),
     }
 
     # default cron (the one created if missing)
@@ -85,7 +85,8 @@ class reminder(orm.Model):
         return True
 
     def get_cron_id(self, cr, uid, context=None):
-        """return the reminder cron's id. Create one if the cron does not exists """
+        """return the reminder cron's id.
+        Create one if the cron does not exists"""
         if context is None:
             context = {}
         cron_obj = self.pool.get('ir.cron')
@@ -93,9 +94,9 @@ class reminder(orm.Model):
         ctx = dict(context, active_test=False)
         cron_ids = cron_obj.search(
             cr, uid,
-                [('function', 'ilike', self.cron['function']),
-                 ('model', 'ilike', self.cron['model'])],
-                context=ctx)
+            [('function', 'ilike', self.cron['function']),
+             ('model', 'ilike', self.cron['model'])],
+            context=ctx)
 
         cron_id = None
         if cron_ids:
@@ -117,7 +118,8 @@ class reminder(orm.Model):
         return tomorrow.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
 
     def get_message_id(self, cr, uid, context=None):
-        """ return the message's id. create one if the message does not exists """
+        """return the message's id. create one
+        if the message does not exists"""
         # there is only one line in db, let's get it
         message_ids = self.search(cr, uid, [], limit=1, context=context)
 
@@ -165,17 +167,17 @@ class reminder(orm.Model):
         cron_id = self.get_cron_id(cr, uid, context=context)
         self.pool.get('ir.cron').write(
             cr, uid, [cron_id],
-                {'active': datas['reminder_active'],
-                 'interval_number': datas['interval_number'],
-                 'interval_type': datas['interval_type'],
-                 'nextcall': datas['nextcall'], },
-                 context=context)
+            {'active': datas['reminder_active'],
+             'interval_number': datas['interval_number'],
+             'interval_type': datas['interval_type'],
+             'nextcall': datas['nextcall'], },
+            context=context)
         # modify the message
         message_id = ids or self.get_message_id(cr, uid, context)
         self.write(
             cr, uid, [message_id],
-                {'reply_to': datas['reply_to'],
-                 'message': datas['message'],
-                 'subject': datas['subject'],
-                 }, context=context)
+            {'reply_to': datas['reply_to'],
+             'message': datas['message'],
+             'subject': datas['subject'],
+             }, context=context)
         return True

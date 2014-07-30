@@ -38,9 +38,11 @@ class res_company(orm.Model):
         for company in self.browse(cr, uid, ids, context=context):
             employee_ids = employee_obj.search(
                 cr, uid,
-                    [('company_id', '=', company.id),
-                     ('receive_timesheet_alerts', '=', True)],
-                    context=context)
+                [
+                    ('company_id', '=', company.id),
+                    ('receive_timesheet_alerts', '=', True)
+                ],
+                context=context)
 
             if not employee_ids:
                 continue
@@ -71,7 +73,9 @@ class res_company(orm.Model):
                         break
         return res
 
-    def compute_timesheet_periods(self, cr, uid, company, date, periods_number=5, context=None):
+    def compute_timesheet_periods(
+        self, cr, uid, company, date, periods_number=5, context=None
+    ):
         """ return the timeranges to display. This is the 5 last timesheets"""
         periods = []
         last_start_date, last_end_date = self.get_last_period_dates(
@@ -87,7 +91,7 @@ class res_company(orm.Model):
             else:
                 raise osv.except_osv(
                     _('Error'),
-                        _('Unknow timesheet range: %s') % company.timesheet_range)
+                    _('Unknow timesheet range: %s') % company.timesheet_range)
 
             start_date = last_start_date + delta
             end_date = last_end_date + delta
@@ -96,7 +100,7 @@ class res_company(orm.Model):
         return periods
 
     def get_last_period_dates(self, cr, uid, company, date, context=None):
-        """ return the start date and end date of the last period to display """
+        """return the start date and end date of the last period to display"""
 
         # return the first day and last day of the month
         if company.timesheet_range == 'month':

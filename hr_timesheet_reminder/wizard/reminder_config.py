@@ -41,7 +41,8 @@ class reminder_config(orm.TransientModel):
     }
 
     def _check_interval_number(self, cr, uid, ids, context=None):
-        """This constraint should always have 1 id, we are in a TransientModel"""
+        """This constraint should always have 1 id,
+        we are in a TransientModel"""
         assert len(ids) == 1, "Only 1 ID expected"
         obj = self.browse(cr, uid, ids[0], context=context)
         if obj.interval_number < 1:
