@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="sale_order_portal_content_timesheet" inherit_id="sale.sale_order_portal_content">
+        <xpath expr="//div[@id='total']" position="after">
+            <div t-if="order.tasks_ids" id="delivered_timesheet" class="row" name="delivered_timesheet" >
+              <hr/>
+              <div class="row">
+                  <div class="col-md-12">
+                    <h4>Delivered hours</h4>
+                  </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <strong>Date</strong>
+                </div>
+                <div class="col-md-4">
+                  <strong>Description</strong>
+                </div>
+                <div class="col-md-4 text-right">
+                  <strong>Quantity</strong>
+                </div>
+              </div>
+              <t t-foreach="order.tasks_ids" t-as="task">
+                  <t t-foreach="task.timesheet_ids" t-as="line">
+                    <div class="row">
+                        <div class="col-md-4">
+                          <span t-field="line.date"/>
+                        </div>
+                        <div class="col-md-4">
+                          <span t-field="line.name"/>
+                        </div>
+                          <div class="col-md-4 text-right">
+                            <span t-field="line.unit_amount" />
+                          </div>
+                    </div>
+                  </t>
+              </t>
+                <div class="row mt16">
+                    <div class="col-md-12 text-right">
+                        <strong>Total</strong> <span t-esc="sum(order.mapped('order_line.qty_delivered'))"/>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>
